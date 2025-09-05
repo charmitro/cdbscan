@@ -17,19 +17,19 @@ src/cdbscan.o: src/cdbscan.c include/cdbscan.h
 examples: examples/example examples/example_distances examples/example_normalize examples/example_estimate_eps examples/example_kdtree
 
 examples/example: examples/example.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 examples/example_distances: examples/example_distances.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 examples/example_normalize: examples/example_normalize.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 examples/example_estimate_eps: examples/example_estimate_eps.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 examples/example_kdtree: examples/example_kdtree.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 install: libcdbscan.a libcdbscan.so
 	install -d $(DESTDIR)$(PREFIX)/lib
@@ -41,19 +41,19 @@ install: libcdbscan.a libcdbscan.so
 tests: tests/test_core_points tests/test_density_reachability tests/test_border_noise tests/test_cluster_properties tests/test_kdtree
 
 tests/test_core_points: tests/test_core_points.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 tests/test_density_reachability: tests/test_density_reachability.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 tests/test_border_noise: tests/test_border_noise.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 tests/test_cluster_properties: tests/test_cluster_properties.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 tests/test_kdtree: tests/test_kdtree.c libcdbscan.a
-	$(CC) $(CFLAGS) -o $@ $< -L. -lcdbscan -lm $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $< libcdbscan.a -lm $(LDFLAGS)
 
 test: tests
 	@echo "Running specification tests..."
