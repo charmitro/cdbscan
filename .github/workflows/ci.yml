@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        cc: [gcc, clang]
+        exclude:
+          - os: macos-latest
+            cc: gcc
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up compiler
+      run: |
+        echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+
+    - name: Build library
+      run: make
+
+    - name: Run tests
+      run: make test
+
+    - name: Build examples
+      run: make examples
+
+    - name: Test installation
+      run: |
+        sudo make install
+        if [ "${{ runner.os }}" = "Linux" ]; then sudo ldconfig; fi
+        echo '#include <cdbscan.h>' > test_install.c
+        echo 'int main() { return 0; }' >> test_install.c
+        ${{ matrix.cc }} test_install.c -lcdbscan -lm -o test_install
+        ./test_install
+
+  format-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install clang-format
+      run: sudo apt-get install -y clang-format
+
+    - name: Check formatting
+      run: |
+        make format
+        git diff --exit-code || (echo "Code is not formatted. Run 'make format'" && exit 1)
+
+  sanitizers:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sanitizer: [address, undefined]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build and test with sanitizer
+      run: |
+        make clean
+        export CFLAGS="-Wall -O2 -fPIC -Iinclude -fsanitize=${{ matrix.sanitizer }} -fno-omit-frame-pointer"
+        export LDFLAGS="-fsanitize=${{ matrix.sanitizer }}"
+        make CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+        make test CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+      env:
+        ASAN_OPTIONS: detect_leaks=1:abort_on_error=1
+        UBSAN_OPTIONS: halt_on_error=1

@@ -1,0 +1,31 @@
+# Build outputs
+libcdbscan.a
+libcdbscan.so
+*.o
+*.lo
+*.la
+.libs/
+.deps/
+*.pc
+
+# Example binaries
+examples/example
+examples/example_distances
+examples/example_estimate_eps
+examples/example_normalize
+examples/example_kdtree
+
+# Test binaries
+tests/test_border_noise
+tests/test_cluster_properties
+tests/test_core_points
+tests/test_density_reachability
+tests/test_kdtree
+
+# Editor backups
+*~
+*.swp
+*.swo
+
+# PDF and documentation
+*.pdf
